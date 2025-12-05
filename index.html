@@ -540,6 +540,42 @@
         <p class="tracking-widest font-sf">&copy; UMA GAMING. ALL RIGHTS RESERVED. [MATRIX ONLINE]</p>
     </footer>
 
+    <script>
+        /**
+         * FAQアコーディオンの開閉を切り替える
+         * @param {number} id - FAQアイテムのID
+         */
+        function toggleFaq(id) {
+            const content = document.getElementById(`faq-content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            // aria-expanded属性を持つ要素（ボタン）を取得
+            const button = content.previousElementSibling; 
+
+            // activeクラスの有無で開閉状態を判断
+            const isExpanded = content.classList.contains('active');
+
+            if (isExpanded) {
+                // 閉じる処理
+                content.classList.remove('active');
+                content.style.maxHeight = '0'; // max-heightを0にして折りたたむ
+                icon.textContent = '+';
+                icon.classList.remove('rotate-45');
+                button.setAttribute('aria-expanded', 'false');
+
+            } else {
+                // 開く処理
+                content.classList.add('active');
+                // scrollHeightを使用してコンテンツの実際の高さを取得し、maxHeightに設定
+                content.style.maxHeight = content.scrollHeight + 'px'; 
+                icon.textContent = '×';
+                icon.classList.add('rotate-45');
+                button.setAttribute('aria-expanded', 'true');
+
+                // アニメーション完了後にmaxHeightをautoに設定して、もしコンテンツの高さが変わっても対応できるようにする（今回は省略）
+            }
+        }
+    </script>
+
     <!-- JavaScript for Particle Effect and Scroll Animation -->
     <script>
         // DOM要素の取得
@@ -673,6 +709,7 @@
 
 </body>
 </html>
+
 
 
 
