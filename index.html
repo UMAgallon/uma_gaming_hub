@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UMA GAMING｜HUB</title>
-    <!-- Tailwind CSSの読み込み (スタイリングの基盤として利用) -->
+    <!-- Tailwind CSSの読み込み -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Interフォントをベースに、SF感を出すためのCSSカスタムプロパティを定義 -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600;800&display=swap');
 
-        /* カスタムカラーとフォントの定義 */
         :root {
             --neon-blue: #00FFFF;
             --dark-blue: #151A2C;
@@ -21,22 +19,16 @@
             --font-body: 'Inter', sans-serif;
         }
 
-        /* 全体の初期化と背景設定 */
         body {
             font-family: var(--font-body);
             background-color: var(--darker-blue);
             color: #E0E0E0;
             min-height: 100vh;
             overflow-x: hidden;
-            /* 背景のグリッドパターン */
             background-image: linear-gradient(to right, var(--dark-blue) 1px, transparent 1px),
                               linear-gradient(to bottom, var(--dark-blue) 1px, transparent 1px);
             background-size: 30px 30px;
         }
-
-        /* ---------------------------------- */
-        /* ネオンエフェクトのCSS */
-        /* ---------------------------------- */
 
         .neon-text {
             color: var(--neon-blue);
@@ -46,7 +38,6 @@
             font-family: var(--font-sf);
         }
 
-        /* ネオンボタンの基本スタイルと影 */
         .neon-btn {
             background-color: var(--dark-blue);
             border: 2px solid var(--neon-blue);
@@ -54,7 +45,6 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* ネオンボタンのホバーアニメーション */
         .neon-btn:hover {
             background-color: var(--neon-blue);
             color: var(--darker-blue);
@@ -63,54 +53,35 @@
             transform: scale(1.05);
         }
 
-        /* ---------------------------------- */
-        /* カードのアニメーション (ネオンボーダー) */
-        /* ---------------------------------- */
         .neon-card {
             position: relative;
-            background-color: #1A2035; /* 濃い背景 */
+            background-color: #1A2035;
             border: 1px solid var(--dark-blue);
             overflow: hidden;
             z-index: 10;
         }
 
-        /* ネオンフリッカーアニメーションの定義 */
         @keyframes neon-flicker {
-            0%, 19.999%, 22%, 62.999%, 64%, 100% {
-                box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--shadow-color);
-                opacity: 1;
-            }
-            20%, 21.999%, 63%, 63.999% {
-                box-shadow: 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 255, 255, 0.3);
-                opacity: 0.85;
-            }
+            0%, 19.999%, 22%, 62.999%, 64%, 100% { box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--shadow-color); opacity: 1; }
+            20%, 21.999%, 63%, 63.999% { box-shadow: 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 255, 255, 0.3); opacity: 0.85; }
         }
 
-        /* ボーダーの光を表現する疑似要素 */
         .neon-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             border: 2px solid transparent;
-            /* ネオンの影 (初期状態は薄く) */
             box-shadow: 0 0 4px var(--shadow-color);
             transition: all 0.5s ease;
             z-index: 20;
             pointer-events: none;
         }
 
-        /* ホバーでボーダーを強調し、ネオンフリッカーアニメーションを適用 */
         .neon-card:hover::before {
             border-color: var(--neon-blue);
             animation: neon-flicker 1.5s infinite alternate; 
         }
 
-        /* ---------------------------------- */
-        /* グリッチタイトルアニメーション */
-        /* ---------------------------------- */
         .glitch-title {
             font-family: var(--font-sf);
             font-size: 4rem;
@@ -119,35 +90,17 @@
             animation: text-shadow 1.5s infinite;
         }
 
-        /* グリッチ効果のための疑似要素 */
         .glitch-title::before, .glitch-title::after {
             content: attr(data-text);
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: var(--darker-blue);
             overflow: hidden;
         }
 
-        /* Before要素（シアン）のグリッチアニメーション */
-        .glitch-title::before {
-            left: 2px;
-            text-shadow: -2px 0 var(--neon-blue);
-            clip-path: inset(60% 0 10% 0);
-            animation: glitch-anim-1 2s infinite alternate-reverse;
-        }
+        .glitch-title::before { left: 2px; text-shadow: -2px 0 var(--neon-blue); clip-path: inset(60% 0 10% 0); animation: glitch-anim-1 2s infinite alternate-reverse; }
+        .glitch-title::after { left: -2px; text-shadow: -2px 0 #FF00FF; clip-path: inset(20% 0 70% 0); animation: glitch-anim-2 3s infinite alternate-reverse; }
 
-        /* After要素（マゼンタ系の色で対比）のグリッチアニメーション */
-        .glitch-title::after {
-            left: -2px;
-            text-shadow: -2px 0 #FF00FF;
-            clip-path: inset(20% 0 70% 0);
-            animation: glitch-anim-2 3s infinite alternate-reverse;
-        }
-
-        /* キーフレームアニメーションの定義 */
         @keyframes glitch-anim-1 {
             0% { clip-path: inset(70% 0 20% 0); }
             10% { clip-path: inset(5% 0 85% 0); }
@@ -166,89 +119,61 @@
             100% { clip-path: inset(5% 0 85% 0); }
         }
 
-        /* ---------------------------------- */
-        /* 固定ヘッダーとSNSアイコンのスタイル調整 */
-        /* ---------------------------------- */
         .header {
-            background-color: rgba(11, 14, 25, 0.95); /* 半透明で下のグリッドが見えるように */
+            background-color: rgba(11, 14, 25, 0.95);
             border-bottom: 1px solid var(--dark-blue);
             box-shadow: 0 2px 10px rgba(0, 255, 255, 0.2);
-            backdrop-filter: blur(5px); /* 背景を少しぼかす */
+            backdrop-filter: blur(5px);
             z-index: 50;
         }
-        .social-link {
-            transition: color 0.3s, text-shadow 0.3s;
-        }
-        .social-link:hover {
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px var(--shadow-color);
-        }
 
-        /* ---------------------------------- */
-        /* スクロールアニメーション (Fade In & Slide Up) */
-        /* ---------------------------------- */
         .fade-in-slide {
             opacity: 0;
-            transform: translateY(20px); /* 20px下に隠しておく */
-            transition: opacity 1s ease-out, transform 0.8s ease-out; /* アニメーションの時間とイージング */
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 0.8s ease-out;
         }
 
         .fade-in-slide.is-visible {
             opacity: 1;
-            transform: translateY(0); /* 本来の位置に戻す */
+            transform: translateY(0);
         }
 
-        /* ---------------------------------- */
-        /* プロフィールアイコンのネオンリング */
-        /* ---------------------------------- */
         .neon-ring {
             position: relative;
-            /* アイコンの画像がはみ出さないように */
             overflow: hidden; 
         }
 
-        /* ネオンリングの影とボーダー */
         .neon-ring::after {
             content: '';
             position: absolute;
-            inset: 0; /* アイコン全体を覆う */
-            border: 4px solid var(--neon-blue); /* 太いボーダー */
-            border-radius: 9999px; /* 完全な円形 */
-            box-shadow: 0 0 10px var(--neon-blue),
-                        0 0 20px var(--shadow-color);
+            inset: 0;
+            border: 4px solid var(--neon-blue);
+            border-radius: 9999px;
+            box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--shadow-color);
             transition: all 0.5s;
         }
         
-        /* ---------------------------------- */
-        /* プロフィールデータ表示パネル風スタイル */
-        /* ---------------------------------- */
         .data-panel {
-            background-color: rgba(26, 32, 53, 0.7); /* カードより少し濃い目の半透明 */
+            background-color: rgba(26, 32, 53, 0.7);
             border: 1px solid var(--neon-blue);
             padding: 2.5rem;
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
         }
 
-        /* ---------------------------------- */
-        /* サイバーセクション区切り線 */
-        /* ---------------------------------- */
         .separator-line {
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
             position: relative;
             overflow: hidden;
-            margin: 4rem auto; /* 中央揃え */
-            max-width: 90%; /* 幅を制限して効果的に見せる */
+            margin: 4rem auto;
+            max-width: 90%;
             box-shadow: 0 0 10px var(--neon-blue);
         }
 
         .separator-line::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            top: 0; left: -100%; width: 100%; height: 100%;
             background: rgba(0, 255, 255, 0.4);
             animation: scan-line 4s infinite linear;
         }
@@ -261,534 +186,269 @@
 </head>
 
 <body class="selection:bg-cyan-500 selection:text-black">
-    <!-- 背景に常に流れる光の演出用コンテナ -->
     <div id="particle-canvas" class="fixed inset-0 pointer-events-none opacity-50 z-0"></div>
 
-    <!-- ヘッダーセクション -->
-    <!-- flex justify-between で左右に要素を配置 -->
     <header class="header fixed top-0 w-full p-4 flex justify-between items-center">
-        
-        <!-- 1. 左: ロゴ -->
         <div class="logo text-2xl font-bold tracking-widest">
             <a href="index.html" class="neon-text no-underline">UMA GAMING</a>
         </div>
-        
-        <!-- 2. 中央: ナビゲーションリンク -->
-        <!-- absolute, left-1/2, -translate-x-1/2 で親要素(fixedのheader)に対して中央寄せを実現 -->
-        <!-- md:flex でデスクトップでのみ表示 -->
         <nav class="absolute left-1/2 transform -translate-x-1/2 hidden md:flex space-x-8 text-sm font-semibold">
-            <!-- 配布コンテンツ -->
             <a href="#downloads" class="hover:text-cyan-400 transition duration-300">配布コンテンツ</a>
-            <!-- FAQ -->
+            <a href="uma_server.html" class="hover:text-cyan-400 transition duration-300">マイクラ鯖</a>
             <a href="#faq" class="hover:text-cyan-400 transition duration-300">FAQ</a>
-            <!-- クリエイター -->
             <a href="#about" class="hover:text-cyan-400 transition duration-300">クリエイター</a>
         </nav>
-
-        <!-- 3. 右: SNSアイコン (右端に配置) -->
         <div class="flex items-center space-x-4 md:space-x-6 text-xl">
-            <!-- YouTube アイコン -->
-            <a href="https://www.youtube.com/@UMA_ModCreator" target="_blank" title="YouTube" class="text-red-600 hover:text-red-400 transition duration-300">
+            <a href="https://www.youtube.com/@UMA_ModCreator" target="_blank" class="text-red-600 hover:text-red-400 transition duration-300">
                 <i class="fab fa-youtube"></i>
             </a>
-            <!-- X (旧Twitter) アイコン -->
-            <a href="https://x.com/UMA_ModCreator" target="_blank" title="X(Twitter)" class="text-white hover:text-cyan-400 transition duration-300">
+            <a href="https://x.com/UMA_ModCreator" target="_blank" class="text-white hover:text-cyan-400 transition duration-300">
                 <i class="fab fa-twitter"></i>
             </a>
-            <!-- Discord アイコン -->
-            <a href="https://discord.gg/vSFzWh7Zfe" target="_blank" title="Discord" class="text-indigo-400 hover:text-indigo-200 transition duration-300">
+            <a href="https://discord.gg/vSFzWh7Zfe" target="_blank" class="text-indigo-400 hover:text-indigo-200 transition duration-300">
                 <i class="fab fa-discord"></i>
             </a>
         </div>
     </header>
     
     <main class="pt-20 relative z-10">
-        <!-- ヒーローセクション (グリッチアニメーション) -->
+        <!-- ヒーローセクション -->
         <section class="hero-section min-h-[50vh] flex flex-col justify-center items-center p-8 bg-black bg-opacity-30 border-b border-cyan-700">
             <h1 class="glitch-title" data-text="UMA GAMING HUB">UMA GAMING HUB</h1>
-            <p class="mt-4 text-xl tracking-widest text-gray-400 font-sf mb-10">UMA GAMINGが制作するコンテンツを手に入れて、最高のゲーム体験をあなたの世界に。</p>
-            
-            <!-- 新しいCTAボタン -->
+            <p class="mt-4 text-xl tracking-widest text-gray-400 font-sf mb-10">最高のゲーム体験をあなたの世界に。</p>
             <button id="cta-button" class="neon-btn px-8 py-3 text-lg font-bold rounded-full tracking-widest shadow-lg">
                 <span class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-4H9V8h4v4h2v4z"/>
-                    </svg>
-                    コンテンツをダウンロード [START DOWNLOAD]
+                    <i class="fas fa-download mr-2"></i>コンテンツをダウンロード
                 </span>
             </button>
         </section>
 
-        <!-- ヒーローとコンセプトの間のセクション区切り線 -->
         <div class="separator-line max-w-7xl mx-auto"></div>
 
-        <!-- チャンネル紹介/コンセプトセクション (#about) を先に配置 -->
+        <!-- クリエイター紹介 -->
         <section id="about" class="py-16 px-4 sm:px-8 lg:px-16 bg-black bg-opacity-50">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold mb-12 text-center neon-text font-sf fade-in-slide is-visible">
-                    <span class="border-b-4 border-cyan-500 pb-2">UMA CREATOR CONCEPT: PROFILE LOG</span>
+                <h2 class="text-3xl font-bold mb-12 text-center neon-text font-sf fade-in-slide">
+                    <span class="border-b-4 border-cyan-500 pb-2">PROFILE LOG</span>
                 </h2>
 
-                <!-- 運営者プロフィールパネル -->
-                <div class="data-panel rounded-xl shadow-2xl fade-in-slide" style="transition-delay: 0.2s;">
+                <div class="data-panel rounded-xl shadow-2xl fade-in-slide">
                     <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
-                        
-                        <!-- 左側: アイコンと名前 -->
                         <div class="flex flex-col items-center flex-shrink-0">
-                            <!-- アイコン画像 (ネオンリング適用) -->
                             <div class="w-32 h-32 md:w-40 md:h-40 neon-ring rounded-full bg-gray-900 mb-4">
-                                <!-- フォールバック画像を使用 -->
-                                <img 
-                                    src="./img/uma_icon.png" 
-                                    alt="チャンネル運営者のアイコン" 
-                                    onerror="this.onerror=null;this.src='https://placehold.co/160x160/0B0E19/00FFFF?text=UMA_ICON_FALLBACK'"
-                                    class="w-full h-full object-cover rounded-full p-1"
-                                />
+                                <img src="./img/uma_icon.png" alt="UMA" onerror="this.onerror=null;this.src='https://placehold.co/160x160/0B0E19/00FFFF?text=UMA'" class="w-full h-full object-cover rounded-full p-1"/>
                             </div>
-                            
-                            <!-- 運営者名 -->
-                            <p class="text-3xl font-sf font-bold neon-text tracking-wider" style="filter: drop-shadow(0 0 5px var(--neon-blue));">
-                                UMA
-                            </p>
+                            <p class="text-3xl font-sf font-bold neon-text tracking-wider">UMA</p>
                             <p class="text-base text-cyan-400 font-sf mt-1">[CONTENT CREATOR]</p>
                         </div>
-                        
-                        <!-- 右側: 詳細なプロフィールとコンセプト -->
                         <div class="flex-grow text-left mt-6 md:mt-0">
-                            <h3 class="text-xl font-bold text-cyan-500 mb-4 font-sf tracking-wider">
-                                PROFILE / MISSION LOG
-                            </h3>
+                            <h3 class="text-xl font-bold text-cyan-500 mb-4 font-sf tracking-wider">MISSION LOG</h3>
                             <ul class="space-y-3 text-sm text-gray-300">
-                                <li class="flex items-start">
-                                    <span class="neon-text mr-3">>></span>
-                                    <p>
-                                        Minecraftのカスタムコンテンツ制作 (主にテクスチャ、データパック、MOD、配布MAP)
-                                    </p>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="neon-text mr-3">>></span>
-                                    <p>
-                                        「ゲームをプレイする」のはもちろん、「ゲームを作成する」ことを目指しています。
-                                    </p>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="neon-text mr-3">>></span>
-                                    <p>
-                                        全てのダウンロードファイルは、私のクリエイティブな実験の成果です。バグを見つけたら、ぜひDiscordで報告をお願いします。
-                                    </p>
-                                </li>
+                                <li class="flex items-start"><span class="neon-text mr-3">>></span><p>Minecraftカスタムコンテンツ制作</p></li>
+                                <li class="flex items-start"><span class="neon-text mr-3">>></span><p>「ゲームを作成する」クリエイティブな活動を追求</p></li>
+                                <li class="flex items-start"><span class="neon-text mr-3">>></span><p>実験的なプロジェクトの成果を公開中</p></li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- おすすめ動画セクション (新規追加) -->
-                <div class="text-center">
-                    <!-- mt-6を維持 -->
-                    <h3 class="text-xl font-sf neon-text mt-6 mb-6">FEATURED VIDEO [注目動画]</h3> 
-                    <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
-                        最新のプロジェクト紹介やチュートリアル動画をこちらでピックアップしています。
-                    </p>
-                    
-                    <!-- ☆☆☆ 修正開始: 動画を横に2つ並べるためのコンテナ（max-w-full, flex, md:flex-row, gap-6）を追加 ☆☆☆ -->
-                    <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
-
-                        <!-- 動画埋め込み 1 -->
-                        <div class="flex-1 bg-[#1A2035] p-4 rounded-xl border border-cyan-800 shadow-xl">
-                            <!-- YouTube埋め込み iframe のラッパー (アスペクト比 16:9 を維持) -->
-                            <div class="relative w-full overflow-hidden rounded-lg" style="padding-top: 56.25%;">
-                                <iframe 
-                                    src="https://www.youtube.com/embed/YU1mo3vxSGM" 
-                                    title="YouTube video player - UMA GAMING FEATURED 1" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                    referrerpolicy="strict-origin-when-cross-origin" 
-                                    allowfullscreen 
-                                    class="absolute top-0 left-0 w-full h-full"
-                                ></iframe>
+                <!-- サーバー紹介（画像対応版） -->
+                <div class="mt-12 fade-in-slide">
+                    <div class="neon-card rounded-xl border border-cyan-500 bg-[#0F121C] overflow-hidden group">
+                        <div class="flex flex-col lg:flex-row">
+                            <!-- 画像エリア -->
+                            <div class="lg:w-1/2 h-64 lg:h-auto overflow-hidden relative">
+                                <img src="./img/server_preview.jpg" alt="サーバープレビュー" onerror="this.onerror=null;this.src='https://placehold.co/800x450/0B0E19/00FFFF?text=SERVER+PREVIEW'" class="w-full h-full object-cover transition duration-500 group-hover:scale-110"/>
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#0F121C] hidden lg:block"></div>
                             </div>
-                        </div>
-
-                        <!-- 動画埋め込み 2 (プレースホルダー) -->
-                        <div class="flex-1 bg-[#1A2035] p-4 rounded-xl border border-cyan-800 shadow-xl">
-                            <!-- YouTube埋め込み iframe のラッパー (アスペクト比 16:9 を維持) -->
-                            <div class="relative w-full overflow-hidden rounded-lg" style="padding-top: 56.25%;">
-                                <iframe 
-                                    src="https://www.youtube.com/embed/17CRf2H0JLo" 
-                                    title="YouTube video player - UMA GAMING FEATURED 2" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                    referrerpolicy="strict-origin-when-cross-origin" 
-                                    allowfullscreen 
-                                    class="absolute top-0 left-0 w-full h-full"
-                                ></iframe>
+                            <!-- テキストエリア -->
+                            <div class="lg:w-1/2 p-8 relative z-10 flex flex-col justify-center">
+                                <div class="flex items-center mb-4">
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 mr-2"></span>
+                                    <h3 class="text-2xl font-sf neon-text tracking-widest">UMA OFFICIAL SERVER</h3>
+                                </div>
+                                <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-6">
+                                    視聴者参加型企画や、配布MODの世界観をマルチプレイで体験。<br>
+                                    公式コミュニティに参加して、最新イベントをチェックしよう。
+                                </p>
+                                <a href="uma_server.html" class="neon-btn px-6 py-3 rounded-lg font-bold text-center inline-block group-hover:shadow-[0_0_20px_var(--neon-blue)]">
+                                    [ENTER WORLD] サーバー詳細
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </section>
         
-        <!-- コンセプトと配布ファイルの間のセクション区切り線を追加 -->
         <div class="separator-line max-w-7xl mx-auto"></div>
 
-        <!-- 配布ファイル一覧セクション (#downloads) を後に配置 -->
-        <section id="downloads" class="py-16 md:py-24 px-4 sm:px-8 lg:px-16">
+        <!-- 配布ファイル一覧 -->
+        <section id="downloads" class="py-16 px-4 sm:px-8 lg:px-16">
             <div class="max-w-7xl mx-auto">
-                <h2 class="text-3xl font-bold mb-12 text-center neon-text font-sf">
-                    <span class="border-b-4 border-cyan-500 pb-2">PROJECT DATA ARTIFACTS</span>
-                </h2>
-                
+                <h2 class="text-3xl font-bold mb-12 text-center neon-text font-sf">PROJECT DATA ARTIFACTS</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <!-- ファイルアイテム 1: 詳細ページへのリンクに変更 -->
                     <article class="download-item neon-card rounded-xl p-6 flex flex-col justify-between fade-in-slide">
                         <div>
                             <h3 class="text-2xl font-bold neon-text mb-2">ピエロがいるサバイバル再現MOD</h3>
-                            <p class="text-sm font-sf mb-4 text-cyan-300">SYSTEM READY: V1.20.1</p>
-                            <p class="text-gray-300 mb-6">サバイバル×人狼がコンセプトのミニゲーム用MOD。</p>
+                            <p class="text-sm font-sf mb-4 text-cyan-300">V1.20.1</p>
+                            <p class="text-gray-300 mb-6">人狼×サバイバルのスリルを再現。</p>
                         </div>
-                        <!-- リンク先を詳細ページに設定 -->
-                        <a href="clown_survival.html" class="download-btn neon-btn text-center py-2 rounded-lg font-bold">
-                            <span class="tracking-widest">VIEW PROJECT LOG</span>
-                        </a>
+                        <a href="clown_survival.html" class="neon-btn text-center py-2 rounded-lg font-bold">VIEW PROJECT LOG</a>
                     </article>
-
-                    <!-- ファイルアイテム 2: アニメーションクラスを追加 -->
                     <article class="download-item neon-card rounded-xl p-6 flex flex-col justify-between fade-in-slide">
                         <div>
                             <h3 class="text-2xl font-bold neon-text mb-2">だるまさんが転んだサバイバル再現MOD</h3>
-                            <p class="text-sm font-sf mb-4 text-cyan-300">SYSTEM READY: V1.20.1</p>
-                            <p class="text-gray-300 mb-6">サバイバル×だるまさんがころんだがコンセプトのミニゲーム用MOD。</p>
+                            <p class="text-sm font-sf mb-4 text-cyan-300">V1.20.1</p>
+                            <p class="text-gray-300 mb-6">命がけのだるまさんがころんだ。</p>
                         </div>
-                        <!-- リンク先を詳細ページに設定 -->
-                        <a href="daruma_survival.html" class="download-btn neon-btn text-center py-2 rounded-lg font-bold">
-                            <span class="tracking-widest">VIEW PROJECT LOG</span>
-                        </a>
+                        <a href="daruma_survival.html" class="neon-btn text-center py-2 rounded-lg font-bold">VIEW PROJECT LOG</a>
                     </article>
-
-                    <!-- ファイルアイテム 3: アニメーションクラスを追加 -->
                     <article class="download-item neon-card rounded-xl p-6 flex flex-col justify-between fade-in-slide">
                         <div>
                             <h3 class="text-2xl font-bold neon-text mb-2">リアル鬼ごっこサバイバル再現MOD</h3>
-                            <p class="text-sm font-sf mb-4 text-cyan-300">SYSTEM READY: V1.20.1</p>
-                            <p class="text-gray-300 mb-6">サバイバル×鬼ごっこがコンセプトのミニゲーム用MOD。</p>
+                            <p class="text-sm font-sf mb-4 text-cyan-300">V1.20.1</p>
+                            <p class="text-gray-300 mb-6">逃げ切れるか。究極の鬼ごっこ。</p>
                         </div>
-                        <!-- リンク先を詳細ページに設定 -->
-                        <a href="real_tag_game_survival.html" class="download-btn neon-btn text-center py-2 rounded-lg font-bold">
-                            <span class="tracking-widest">VIEW PROJECT LOG</span>
-                        </a>
+                        <a href="real_tag_game_survival.html" class="neon-btn text-center py-2 rounded-lg font-bold">VIEW PROJECT LOG</a>
                     </article>
-
-                    <!-- 今後追加するファイル用のプレースホルダー: アニメーションクラスを追加 -->
-                    <article class="download-item neon-card rounded-xl p-6 opacity-70 border-dashed hover:opacity-100 transition duration-500 flex flex-col justify-center items-center text-center fade-in-slide">
-                        <h3 class="text-xl font-sf text-gray-500">NEW PROJECT LOADING...</h3>
-                        <p class="text-gray-600 mt-2">次のデータアーティファクトにご期待ください。</p>
-                    </article>
-
                 </div>
             </div>
         </section>
 
-        <!-- ☆☆☆ ここからFAQセクションの追加 ☆☆☆ -->
-        <section id="faq" class="mt-20 pt-10 mb-16">
-            <h2 class="text-3xl md:text-4xl font-sf neon-text text-center mb-10 border-b border-cyan-700 pb-4">
-                [ KNOWLEDGE BASE ] よくある質問
-            </h2>
-        
+        <!-- FAQセクション -->
+        <section id="faq" class="py-20 bg-black bg-opacity-20 px-4">
+            <h2 class="text-3xl font-sf neon-text text-center mb-10 border-b border-cyan-700 pb-4">KNOWLEDGE BASE</h2>
             <div class="max-w-4xl mx-auto space-y-4">
-                
-                <!-- FAQ Item 1 -->
-                <div class="faq-item rounded-lg overflow-hidden border border-cyan-800 shadow-lg">
-                    <button 
-                        class="faq-button w-full text-left p-4 flex justify-between items-center text-lg font-semibold bg-[#1A2035] hover:bg-[#202840] transition duration-300 focus:outline-none"
-                        aria-expanded="false"
-                        aria-controls="faq-content-1"
-                        onclick="toggleFaq(1)"
-                    >
-                        <span class="text-white">Q: カラフルピーチさんの再現作品は著作権違反になりませんか？</span>
-                        <span id="icon-1" class="text-cyan-400 transform transition duration-300 text-2xl font-light">+</span>
+                <!-- FAQ 1 -->
+                <div class="faq-item rounded-lg border border-cyan-800">
+                    <button class="w-full text-left p-4 flex justify-between bg-[#1A2035] hover:bg-[#202840]" onclick="toggleFaq(1)">
+                        <span>Q: カラフルピーチさんの再現作品は著作権違反になりませんか？</span>
+                        <span id="icon-1" class="text-cyan-400">+</span>
                     </button>
-                    <div id="faq-content-1" class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-[#0F121C]">
-                        <p class="p-4 text-gray-300 border-t border-cyan-900">
-                            A: カラフルピーチさんの公式ガイドラインによると著作権違反にはならないようです。
-                        </p>
+                    <div id="faq-content-1" class="max-h-0 overflow-hidden transition-all duration-300 bg-[#0F121C]">
+                        <p class="p-4 text-gray-400">A: 公式ガイドラインに基づき、ファン活動の範囲内であれば問題ありません。</p>
                     </div>
                 </div>
-        
-                <!-- FAQ Item 2 -->
-                <div class="faq-item rounded-lg overflow-hidden border border-cyan-800 shadow-lg">
-                    <button 
-                        class="faq-button w-full text-left p-4 flex justify-between items-center text-lg font-semibold bg-[#1A2035] hover:bg-[#202840] transition duration-300 focus:outline-none"
-                        aria-expanded="false"
-                        aria-controls="faq-content-2"
-                        onclick="toggleFaq(2)"
-                    >
-                        <span class="text-white">Q: コンテンツの再配布・改変は許可されていますか？</span>
-                        <span id="icon-2" class="text-cyan-400 transform transition duration-300 text-2xl font-light">+</span>
+                <!-- FAQ 2 -->
+                <div class="faq-item rounded-lg border border-cyan-800">
+                    <button class="w-full text-left p-4 flex justify-between bg-[#1A2035] hover:bg-[#202840]" onclick="toggleFaq(2)">
+                        <span>Q: コンテンツの再配布・改変は許可されていますか？</span>
+                        <span id="icon-2" class="text-cyan-400">+</span>
                     </button>
-                    <div id="faq-content-2" class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-[#0F121C]">
-                        <p class="p-4 text-gray-300 border-t border-cyan-900">
-                            A: 当サイトで配布されているファイルは、個人的な利用に限り許可されています。再配布、または改変後の再配布、自作発言は一切禁止されています。動画配信やスクリーンショットでの利用は自由ですが、できればクレジット表記をお願いします。
-                        </p>
+                    <div id="faq-content-2" class="max-h-0 overflow-hidden transition-all duration-300 bg-[#0F121C]">
+                        <p class="p-4 text-gray-400">A: 個人利用のみ許可されています。再配布や自作発言は禁止です。</p>
                     </div>
                 </div>
-        
-                <!-- FAQ Item 3 -->
-                <div class="faq-item rounded-lg overflow-hidden border border-cyan-800 shadow-lg">
-                    <button 
-                        class="faq-button w-full text-left p-4 flex justify-between items-center text-lg font-semibold bg-[#1A2035] hover:bg-[#202840] transition duration-300 focus:outline-none"
-                        aria-expanded="false"
-                        aria-controls="faq-content-3"
-                        onclick="toggleFaq(3)"
-                    >
-                        <span class="text-white">Q: 不具合を見つけました。どこに報告すればいいですか？</span>
-                        <span id="icon-3" class="text-cyan-400 transform transition duration-300 text-2xl font-light">+</span>
+                <!-- FAQ 3 -->
+                <div class="faq-item rounded-lg border border-cyan-800">
+                    <button class="w-full text-left p-4 flex justify-between bg-[#1A2035] hover:bg-[#202840]" onclick="toggleFaq(3)">
+                        <span>Q: 不具合を見つけました。どこに報告すればいいですか？</span>
+                        <span id="icon-3" class="text-cyan-400">+</span>
                     </button>
-                    <div id="faq-content-3" class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-[#0F121C]">
-                        <p class="p-4 text-gray-300 border-t border-cyan-900">
-                            A: DiscordサーバーまたはXアカウント（@UMA_ModCreator）のDMまでご連絡ください。可能であれば、発生した状況、使用したバージョン、エラーログなどを添えていただけると、迅速な対応が可能です。
-                        </p>
+                    <div id="faq-content-3" class="max-h-0 overflow-hidden transition-all duration-300 bg-[#0F121C]">
+                        <p class="p-4 text-gray-400">A: DiscordサーバーまたはXのDMまで詳細を添えてご連絡ください。</p>
                     </div>
                 </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="faq-item rounded-lg overflow-hidden border border-cyan-800 shadow-lg">
-                    <button 
-                        class="faq-button w-full text-left p-4 flex justify-between items-center text-lg font-semibold bg-[#1A2035] hover:bg-[#202840] transition duration-300 focus:outline-none"
-                        aria-expanded="false"
-                        aria-controls="faq-content-4"
-                        onclick="toggleFaq(4)"
-                    >
-                        <span class="text-white">Q: コンテンツの詳しい使い方がわかりません。教えていただけませんか？</span>
-                        <span id="icon-4" class="text-cyan-400 transform transition duration-300 text-2xl font-light">+</span>
+                <!-- 追加 FAQ 4 -->
+                <div class="faq-item rounded-lg border border-cyan-800">
+                    <button class="w-full text-left p-4 flex justify-between bg-[#1A2035] hover:bg-[#202840]" onclick="toggleFaq(4)">
+                        <span>Q: サーバーへの参加に費用はかかりますか？</span>
+                        <span id="icon-4" class="text-cyan-400">+</span>
                     </button>
-                    <div id="faq-content-4" class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-[#0F121C]">
-                        <p class="p-4 text-gray-300 border-t border-cyan-900">
-                            A: YouTubeに上がっている紹介動画をご覧ください。それでもわからない場合はDiscordサーバーで質問を受け付け中です。
-                        </p>
+                    <div id="faq-content-4" class="max-h-0 overflow-hidden transition-all duration-300 bg-[#0F121C]">
+                        <p class="p-4 text-gray-400">A: 基本的に無料で参加いただけます。ただし、Minecraft Java Editionの本体購入が必要です。</p>
                     </div>
                 </div>
-
-                <!-- FAQ Item 5 -->
-                <div class="faq-item rounded-lg overflow-hidden border border-cyan-800 shadow-lg">
-                    <button 
-                        class="faq-button w-full text-left p-4 flex justify-between items-center text-lg font-semibold bg-[#1A2035] hover:bg-[#202840] transition duration-300 focus:outline-none"
-                        aria-expanded="false"
-                        aria-controls="faq-content-5"
-                        onclick="toggleFaq(5)"
-                    >
-                        <span class="text-white">Q: このコンテンツは無料ですか？またSwitchでもプレイできますか？</span>
-                        <span id="icon-5" class="text-cyan-400 transform transition duration-300 text-2xl font-light">+</span>
+                <!-- 追加 FAQ 5 -->
+                <div class="faq-item rounded-lg border border-cyan-800">
+                    <button class="w-full text-left p-4 flex justify-between bg-[#1A2035] hover:bg-[#202840]" onclick="toggleFaq(5)">
+                        <span>Q: 配布MODはどのマイクラのバージョンに対応していますか？</span>
+                        <span id="icon-5" class="text-cyan-400">+</span>
                     </button>
-                    <div id="faq-content-5" class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out bg-[#0F121C]">
-                        <p class="p-4 text-gray-300 border-t border-cyan-900">
-                            A: コンテンツは完全無料です。残念ながらSwitch含む「統合版(PC版以外)」向けのコンテンツは制作していません。またDiscrodサーバーにてコンテンツの先行配布を行っているのでぜひチェックしてみてください。
-                        </p>
+                    <div id="faq-content-5" class="max-h-0 overflow-hidden transition-all duration-300 bg-[#0F121C]">
+                        <p class="p-4 text-gray-400">A: 現在、主に Java Edition 1.20.1 (Forge) に対応しています。詳細は各プロジェクトログを確認してください。</p>
                     </div>
                 </div>
-                
             </div>
         </section>
-        <!-- ☆☆☆ FAQセクションの追加終了 ☆☆☆ -->
 
-        <!-- コンタクト/情報セクション -->
-        <section class="mt-20 text-center">
+        <section class="mt-20 text-center pb-20 px-4">
             <h2 class="text-3xl font-sf neon-text mb-6">CONNECT WITH UMA</h2>
-            <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
-                最新のアップデート情報や制作過程は、以下のプラットフォームでチェックしてください。
-            </p>
-            <div class="flex justify-center space-x-6">
-                <!-- YouTube -->
-                <a href="https://www.youtube.com/@UMA_ModCreator" target="_blank" class="text-3xl text-red-600 hover:text-red-400 transition duration-300">
-                    <i class="fab fa-youtube"></i>
-                </a>
-                <!-- X (Twitter) -->
-                <a href="https://x.com/UMA_ModCreator" target="_blank" class="text-3xl text-white hover:text-cyan-400 transition duration-300">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <!-- Discord -->
-                <a href="https://discord.gg/vSFzWh7Zfe" target="_blank" class="text-3xl text-indigo-400 hover:text-indigo-200 transition duration-300">
-                    <i class="fab fa-discord"></i>
-                </a>
+            <div class="flex justify-center space-x-6 text-3xl">
+                <a href="https://www.youtube.com/@UMA_ModCreator" target="_blank" class="text-red-600 hover:text-red-400 transition duration-300"><i class="fab fa-youtube"></i></a>
+                <a href="https://x.com/UMA_ModCreator" target="_blank" class="text-white hover:text-cyan-400 transition duration-300"><i class="fab fa-twitter"></i></a>
+                <a href="https://discord.gg/vSFzWh7Zfe" target="_blank" class="text-indigo-400 hover:text-indigo-200 transition duration-300"><i class="fab fa-discord"></i></a>
             </div>
         </section>
-        
     </main>
 
-    <!-- フッター -->
-    <footer class="footer p-6 text-center text-xs text-gray-600 border-t border-cyan-900 mt-12">
-        <p class="tracking-widest font-sf">&copy; UMA GAMING. ALL RIGHTS RESERVED. [MATRIX ONLINE]</p>
+    <footer class="p-6 text-center text-xs text-gray-600 border-t border-cyan-900">
+        <p class="tracking-widest font-sf">&copy; UMA GAMING. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script>
-        /**
-         * FAQアコーディオンの開閉を切り替える
-         * @param {number} id - FAQアイテムのID
-         */
         function toggleFaq(id) {
             const content = document.getElementById(`faq-content-${id}`);
             const icon = document.getElementById(`icon-${id}`);
-            // aria-expanded属性を持つ要素（ボタン）を取得
-            const button = content.previousElementSibling; 
-
-            // activeクラスの有無で開閉状態を判断
-            const isExpanded = content.classList.contains('active');
-
-            if (isExpanded) {
-                // 閉じる処理
-                content.classList.remove('active');
-                content.style.maxHeight = '0'; // max-heightを0にして折りたたむ
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
                 icon.textContent = '+';
-                icon.classList.remove('rotate-45');
-                button.setAttribute('aria-expanded', 'false');
-
             } else {
-                // 開く処理
-                content.classList.add('active');
-                // scrollHeightを使用してコンテンツの実際の高さを取得し、maxHeightに設定
-                content.style.maxHeight = content.scrollHeight + 'px'; 
+                content.style.maxHeight = content.scrollHeight + 'px';
                 icon.textContent = '×';
-                icon.classList.add('rotate-45');
-                button.setAttribute('aria-expanded', 'true');
-
-                // アニメーション完了後にmaxHeightをautoに設定して、もしコンテンツの高さが変わっても対応できるようにする（今回は省略）
             }
         }
-    </script>
 
-    <!-- JavaScript for Particle Effect and Scroll Animation -->
-    <script>
-        // DOM要素の取得
         const particleCanvas = document.getElementById('particle-canvas');
-        var W = window.innerWidth; 
-        var H = window.innerHeight; 
+        let canvasW = window.innerWidth, canvasH = window.innerHeight;
 
-        // Particleクラスの定義
         class Particle {
             constructor() {
-                this.x = Math.random() * W;
-                this.y = Math.random() * H;
+                this.x = Math.random() * canvasW; 
+                this.y = Math.random() * canvasH;
                 this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.color = 'rgba(0, 255, 255, ' + (Math.random() * 0.3 + 0.1) + ')';
+                this.speedX = Math.random() * 0.4 - 0.2; 
+                this.speedY = Math.random() * 0.4 - 0.2;
                 this.element = document.createElement('div');
-                this.element.style.cssText = `
-                    position: absolute;
-                    width: ${this.size}px;
-                    height: ${this.size}px;
-                    background-color: ${this.color};
-                    border-radius: 50%;
-                    box-shadow: 0 0 5px var(--neon-blue);
-                    pointer-events: none;
-                    transition: transform 0.05s linear;
-                `;
+                this.element.style.cssText = `position:absolute;width:${this.size}px;height:${this.size}px;background:var(--neon-blue);border-radius:50%;box-shadow:0 0 5px var(--neon-blue);opacity:0.3;pointer-events:none;`;
                 particleCanvas.appendChild(this.element);
             }
-
             update() {
-                // 粒子の移動
-                this.x += this.speedX;
+                this.x += this.speedX; 
                 this.y += this.speedY;
-
-                // 画面外に出たら反対側から出現させる
-                if (this.x > W) this.x = 0;
-                if (this.x < 0) this.x = W;
-                if (this.y > H) this.y = 0;
-                if (this.y < 0) this.y = H;
-
+                if (this.x > canvasW) this.x = 0; 
+                if (this.x < 0) this.x = canvasW;
+                if (this.y > canvasH) this.y = 0; 
+                if (this.y < 0) this.y = canvasH;
                 this.element.style.transform = `translate(${this.x}px, ${this.y}px)`;
             }
         }
 
-        let particlesArray = [];
-        const numberOfParticles = 80; // 粒子の数
+        let particles = Array.from({ length: 50 }, () => new Particle());
 
-        // パーティクルアニメーションの初期化と実行
-        function initParticles() {
-            // 既存のパーティクルをクリア
-            particleCanvas.innerHTML = '';
-            particlesArray = [];
-
-            // 現在の画面サイズを取得
-            W = window.innerWidth;
-            H = window.innerHeight;
-
-            for (let i = 0; i < numberOfParticles; i++) {
-                particlesArray.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            requestAnimationFrame(animateParticles);
-            particlesArray.forEach(particle => particle.update());
-        }
-
-        // ----------------------------------
-        // スクロールアニメーションの監視 (IntersectionObserver)
-        // ----------------------------------
-        function setupScrollAnimation() {
-            // IntersectionObserverの設定
-            const observerOptions = {
-                root: null, // ビューポートをルートとする
-                rootMargin: '0px',
-                threshold: 0.1 // 要素が10%見えたら発火
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    // 要素がビューポートに入ったら
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        // 一度表示したら監視を停止
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            // すべてのアニメーション対象要素を取得して監視を開始
-            document.querySelectorAll('.fade-in-slide').forEach(element => {
-                // 既にis-visibleが付いている要素は監視しない
-                if (!element.classList.contains('is-visible')) {
-                    observer.observe(element);
-                }
-            });
-            
-            // ヒーローセクションの子要素にis-visibleクラスを付けているため、ここでは特に操作は不要です。
+        function loop() { 
+            particles.forEach(p => p.update()); 
+            requestAnimationFrame(loop); 
         }
         
-        // ヒーローセクションのCTAボタンがクリックされた時のスクロール処理
-        function setupCtaScroll() {
-            const ctaButton = document.getElementById('cta-button');
-            const downloadsSection = document.getElementById('downloads');
+        // パーティクルアニメーション開始
+        loop();
 
-            if (ctaButton && downloadsSection) {
-                ctaButton.addEventListener('click', () => {
-                    downloadsSection.scrollIntoView({ behavior: 'smooth' });
-                });
-            }
-        }
-
-        // ウィンドウロード時にすべての処理を開始
-        window.onload = function() {
-            initParticles();
-            animateParticles();
-            setupScrollAnimation();
-            setupCtaScroll();
-        };
-
-        // ウィンドウリサイズ時の処理（パーティクルが画面からはみ出さないように）
-        let resizeTimer;
+        // 画面リサイズ時にキャンバスサイズを更新
         window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                initParticles();
-            }, 250); // 250ms後に再初期化
+            canvasW = window.innerWidth;
+            canvasH = window.innerHeight;
         });
-    </script>
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-slide').forEach(e => observer.observe(e));
+        
+        document.getElementById('cta-button').onclick = () => document.getElementById('downloads').scrollIntoView({ behavior: 'smooth' });
+    </script>
 </body>
 </html>
 
