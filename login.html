@@ -146,8 +146,8 @@
         <div class="data-panel p-6 md:p-10 rounded-sm relative">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
             
-            <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">AUTHENTICATION REQUIRED</h1>
-            <p class="text-center text-xs text-cyan-500 mb-8 font-mono tracking-widest uppercase">Verify your mission by watching the data stream</p>
+            <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">認証が必要です！</h1>
+            <p class="text-center text-xs text-cyan-500 mb-8 font-mono tracking-widest uppercase">動画を見てデイリーボーナスを獲得する</p>
 
             <!-- 動画エリア -->
             <div class="video-container mb-6">
@@ -165,13 +165,13 @@
 
             <!-- ステータス表示 -->
             <div id="status-display" class="status-box text-center mb-8 h-6">
-                <span class="text-gray-500">[ SYSTEM ]</span> READY TO STREAM
+                <span class="text-gray-500">[ SYSTEM ]</span> 動画の準備完了
             </div>
 
             <!-- 報酬ボタン -->
             <div class="flex justify-center">
                 <button id="reward-btn" onclick="claimReward()" class="neon-btn px-10 py-4 rounded-sm font-bold tracking-widest uppercase">
-                    <i class="fas fa-gift mr-2"></i> GET REWARD
+                    <i class="fas fa-gift mr-2"></i> 報酬を獲得
                 </button>
             </div>
 
@@ -253,7 +253,7 @@
                     updateStatus("INJECTION DETECTED: ACCESS DENIED", "warning-text");
                 } else {
                     if (now > maxTime) maxTime = now;
-                    updateStatus("STREAMING DATA...", "neon-text");
+                    updateStatus("動画を視聴中...", "neon-text");
                 }
             }
         }, 500);
