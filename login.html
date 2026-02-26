@@ -243,7 +243,7 @@
             fetch(`${GAS_URL}?player=${encodeURIComponent(playerName)}`, {
                 mode: 'no-cors'
             }).then(() => {
-                alert("報酬がシステムに登録されました。");
+                alert("報酬を獲得しました！ゲームに戻って確認してみましょう！");
                 btn.innerText = "取得済み";
             }).catch(() => {
                 alert("通信エラー。");
