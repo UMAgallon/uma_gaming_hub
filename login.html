@@ -1,45 +1,213 @@
-var player;
-var lastMaxTime = 0; // これまで再生した最大秒数
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Bonus - uma.dedyn.io</title>
+    <style>
+        :root {
+            --primary-color: #2ecc71;
+            --bg-color: #f4f7f6;
+            --text-color: #2c3e50;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+        }
+        h1 { margin-bottom: 10px; font-size: 24px; }
+        p { margin-bottom: 20px; color: #7f8c8d; }
+        
+        /* プレイヤーコンテナ */
+        #player-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        #player {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
 
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '360',
-        width: '640',
-        videoId: 'あなたの動画ID',
-        playerVars: { 
-            'autoplay': 0, 
-            'controls': 1,
-            'rel': 0,
-            'disablekb': 1 // キーボード操作でのスキップも禁止
-        },
-        events: {
-            'onStateChange': onPlayerStateChange
+        /* 報酬ボタン */
+        #reward-btn {
+            display: none;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        #reward-btn:hover {
+            background-color: #27ae60;
+            transform: scale(1.05);
+        }
+        #reward-btn:active {
+            transform: scale(0.95);
+        }
+
+        #status-msg {
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        .warning { color: #e74c3c; }
+        .success { color: #2ecc71; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>デイリーボーナス視聴</h1>
+    <p id="player-display">プレイヤー: 読み込み中...</p>
+    
+    <div id="player-wrapper">
+        <div id="player"></div>
+    </div>
+
+    <div id="status-msg">動画を再生してください</div>
+    
+    <button id="reward-btn" onclick="claimReward()">報酬を受け取る</button>
+</div>
+
+<script>
+    // 1. 設定項目
+    const VIDEO_ID = 'Qc5AO400s6s'; // あなたのYouTube動画ID
+    const GAS_WEBAPP_URL = 'YOUR_GAS_URL'; // デプロイしたGASのURL
+
+    // 2. 変数管理
+    const urlParams = new URLSearchParams(window.location.search);
+    const playerName = urlParams.get('player');
+    let player;
+    let maxTimeReached = 0;
+    let isFinished = false;
+
+    document.getElementById('player-display').innerText = playerName ? `プレイヤー: ${playerName}` : "プレイヤー名が指定されていません";
+
+    // 3. YouTube API 読み込み
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            videoId: VIDEO_ID,
+            playerVars: {
+                'autoplay': 0,
+                'controls': 1, // コントロールは表示するがJSでガードする
+                'disablekb': 1,
+                'rel': 0,
+                'modestbranding': 1
+            },
+            events: {
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    // 4. 早送り禁止ロジック (0.5秒おきに監視)
+    setInterval(() => {
+        if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+            let currentTime = player.getCurrentTime();
+            
+            // 過去に到達した最大秒数より3秒以上先に飛ばそうとしたら戻す
+            if (currentTime > maxTimeReached + 3) {
+                player.seekTo(maxTimeReached, true);
+                showStatus("早送りは禁止されています！", "warning");
+            } else {
+                if (currentTime > maxTimeReached) {
+                    maxTimeReached = currentTime;
+                }
+                showStatus("視聴中...", "");
+            }
+        }
+    }, 500);
+
+    // 5. タブを離れたら停止
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            showStatus("一時停止しました（画面を離れないでください）", "warning");
         }
     });
-}
 
-// 0.5秒ごとに再生位置をチェックするループ
-setInterval(function() {
-    if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
-        var currentTime = player.getCurrentTime();
-        
-        // ユーザーがこれまで見た範囲より先にスキップしようとした場合
-        if (currentTime > lastMaxTime + 2) { 
-            player.seekTo(lastMaxTime); // 見ていた位置まで戻す
-            document.getElementById('status').innerText = "早送りは禁止されています！";
-        } else {
-            lastMaxTime = currentTime; // 正常な再生なら最大時間を更新
+    // 6. 状態変化検知
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+            // 動画の総時間と視聴済み最大時間を比較して最終確認
+            const duration = player.getDuration();
+            if (maxTimeReached >= duration - 2) {
+                isFinished = true;
+                document.getElementById('reward-btn').style.display = 'inline-block';
+                showStatus("視聴完了！ボタンを押して報酬を受け取ってください。", "success");
+            } else {
+                showStatus("最後まで正しく視聴してください。", "warning");
+            }
         }
     }
-}, 500);
 
-function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
-        // 動画の長さ（player.getDuration()）に対して、
-        // ちゃんと最後まで見たか最終チェック（念のため）
-        if (lastMaxTime >= player.getDuration() - 1) {
-            document.getElementById('reward-btn').style.display = 'inline-block';
-            document.getElementById('status').innerText = "視聴完了！報酬を受け取ってください。";
-        }
+    function showStatus(msg, className) {
+        const el = document.getElementById('status-msg');
+        el.innerText = msg;
+        el.className = className;
     }
-}
+
+    // 7. 報酬送信
+    function claimReward() {
+        if (!isFinished) return;
+        if (!playerName) {
+            alert("プレイヤー名が不明です。");
+            return;
+        }
+
+        const btn = document.getElementById('reward-btn');
+        btn.disabled = true;
+        btn.innerText = "送信中...";
+
+        // GASへ送信 (CORS対策のため no-cors または JSONP/通常のfetchを使用)
+        fetch(`${GAS_WEBAPP_URL}?player=${encodeURIComponent(playerName)}`, {
+            method: 'GET',
+            mode: 'no-cors' 
+        })
+        .then(() => {
+            alert("報酬リクエストを送信しました！マイクラで確認してください。");
+            btn.innerText = "送信完了";
+            // 悪用防止のためボタンを再度隠す
+            btn.style.display = 'none';
+        })
+        .catch(err => {
+            alert("通信エラーが発生しました。");
+            btn.disabled = false;
+            btn.innerText = "報酬を受け取る";
+        });
+    }
+</script>
+
+</body>
+</html>
