@@ -146,7 +146,7 @@
         <div class="data-panel p-6 md:p-10 rounded-sm relative">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
             
-            <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">認証が必要です！</h1>
+            <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">デイリーボーナス</h1>
             <p class="text-center text-xs text-cyan-500 mb-8 font-mono tracking-widest uppercase">動画を見てデイリーボーナスを獲得する</p>
 
             <!-- 動画エリア -->
@@ -261,7 +261,7 @@
         document.addEventListener("visibilitychange", () => {
             if (document.hidden && isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
                 player.pauseVideo();
-                updateStatus("STREAM PAUSED: STAY ON THIS PAGE", "warning-text");
+                updateStatus("動画停止中: このページを離れないでください！", "warning-text");
             }
         });
 
@@ -274,13 +274,13 @@
                 if (maxTime >= duration * 0.98) {
                     isComplete = true;
                     document.getElementById('reward-btn').style.display = 'block';
-                    updateStatus("MISSION COMPLETE: ACCESS GRANTED", "neon-text");
+                    updateStatus("動画視聴完了！", "neon-text");
                 }
             }
         }
 
         function onPlayerError(event) {
-            updateStatus("ERROR: CONNECTION FAILED", "warning-text");
+            updateStatus("エラー: 接続できませんでした", "warning-text");
         }
 
         function updateStatus(msg, className) {
@@ -292,7 +292,7 @@
             if (!isComplete) return;
             const btn = document.getElementById('reward-btn');
             btn.disabled = true;
-            btn.innerText = "PROCESSING...";
+            btn.innerText = "処理中...";
 
             fetch(`${GAS_URL}?player=${encodeURIComponent(playerName)}`, {
                 mode: 'no-cors'
