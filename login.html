@@ -114,7 +114,7 @@
             <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
             
             <h1 class="neon-text text-3xl md:text-5xl mb-3 text-center tracking-tighter font-bold">デイリーボーナス</h1>
-            <p class="text-center text-sm md:text-lg text-cyan-500 mb-8 font-mono tracking-widest uppercase">映像をタップして視聴開始</p>
+            <p class="text-center text-sm md:text-lg text-cyan-500 mb-8 font-mono tracking-widest uppercase">動画を最後まで視聴して報酬を獲得</p>
 
             <!-- 動画エリア：クリックで再生/一時停止 -->
             <div class="video-container mb-8" onclick="togglePlay()">
@@ -124,7 +124,7 @@
 
             <!-- ステータス表示 -->
             <div id="status-display" class="status-box text-center mb-8 h-8">
-                <span class="text-gray-400">[ システム ]</span> READY TO STREAM
+                <span class="text-gray-400">[ システム ]</span> 動画再生の準備完了
             </div>
 
             <!-- 報酬ボタン -->
@@ -218,7 +218,7 @@
                 if (maxTime >= duration * 0.98) {
                     isComplete = true;
                     document.getElementById('reward-btn').style.display = 'block';
-                    updateStatus("ミッション完了！報酬を受け取れます", "neon-text text-xl");
+                    updateStatus("完了！報酬を受け取れます", "neon-text text-xl");
                 } else {
                     updateStatus("再生が不十分です。最後まで視聴してください", "warning-text");
                 }
