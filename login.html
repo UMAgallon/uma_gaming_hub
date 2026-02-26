@@ -32,15 +32,15 @@
 
         .neon-text {
             color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--shadow-color), 0 0 10px var(--shadow-color);
+            text-shadow: 0 0 8px var(--shadow-color);
             font-family: var(--font-sf);
         }
 
         .data-panel {
-            background-color: rgba(26, 32, 53, 0.9);
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+            background-color: rgba(26, 32, 53, 0.95);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
         }
 
         .video-container {
@@ -48,14 +48,11 @@
             width: 100%;
             padding-top: 56.25%;
             background: #000;
-            border: 2px solid var(--dark-blue);
+            border: 1px solid var(--dark-blue);
             border-radius: 4px;
             overflow: hidden;
         }
 
-        /* YouTube Iframe本体 
-           少し大きめに配置して、上下の黒帯やロゴを隠すテクニック 
-        */
         #player {
             position: absolute;
             top: -2px; 
@@ -64,9 +61,6 @@
             height: calc(100% + 4px);
         }
 
-        /* 動画上の透明ガード 
-           「その他の動画」をクリックさせないための透明な壁
-        */
         .video-guard {
             position: absolute;
             top: 0;
@@ -78,39 +72,43 @@
             cursor: default;
         }
 
-        /* カスタムコントロール */
-        .custom-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        /* 再生コントロールエリア（動画の外） */
+        .controls-area {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 20;
+            margin-bottom: 24px;
         }
 
         .control-btn {
-            background: none;
-            border: none;
+            background: var(--dark-blue);
+            border: 1px solid var(--neon-blue);
             color: var(--neon-blue);
-            font-size: 1.8rem;
+            font-size: 2.5rem; /* 大きく調整 */
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
             cursor: pointer;
-            filter: drop-shadow(0 0 5px var(--neon-blue));
+            filter: drop-shadow(0 0 8px var(--neon-blue));
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .control-btn:hover {
             transform: scale(1.1);
-            filter: drop-shadow(0 0 10px var(--neon-blue));
+            background: var(--neon-blue);
+            color: var(--darker-blue);
         }
 
         .neon-btn {
             background-color: var(--dark-blue);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 8px var(--shadow-color);
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 15px var(--shadow-color);
             transition: all 0.3s ease-in-out;
             font-family: var(--font-sf);
             display: none;
@@ -119,19 +117,20 @@
         .neon-btn:hover:not(:disabled) {
             background-color: var(--neon-blue);
             color: var(--darker-blue);
-            box-shadow: 0 0 20px var(--neon-blue);
+            box-shadow: 0 0 25px var(--neon-blue);
             transform: scale(1.05);
         }
 
         .status-box {
             font-family: var(--font-sf);
             letter-spacing: 2px;
-            font-size: 0.8rem;
+            font-size: 1.1rem; /* 大きく調整 */
+            font-weight: bold;
         }
 
         .warning-text {
             color: #FF00FF;
-            text-shadow: 0 0 5px #FF00FF;
+            text-shadow: 0 0 8px #FF00FF;
             animation: flicker 0.5s infinite;
         }
 
@@ -142,43 +141,43 @@
 </head>
 <body>
 
-    <div class="max-w-3xl w-full px-4">
-        <div class="data-panel p-6 md:p-10 rounded-sm relative">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+    <div class="max-w-4xl w-full px-6">
+        <div class="data-panel p-8 md:p-14 rounded-lg relative">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
             
-            <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">デイリーボーナス</h1>
-            <p class="text-center text-xs text-cyan-500 mb-8 font-mono tracking-widest uppercase">動画を見てデイリーボーナスを獲得する</p>
+            <h1 class="neon-text text-3xl md:text-5xl mb-4 text-center tracking-tighter font-bold">デイリーボーナス</h1>
+            <p class="text-center text-sm md:text-lg text-cyan-500 mb-10 font-mono tracking-widest uppercase">動画を見てデイリーボーナスを獲得する</p>
 
             <!-- 動画エリア -->
-            <div class="video-container mb-6">
+            <div class="video-container mb-4">
                 <div id="player"></div>
-                <!-- 透明なガードレイヤー（クリックを吸収する） -->
-                <div class="video-guard" onclick="togglePlay()"></div>
-                
-                <!-- カスタムコントロール -->
-                <div class="custom-controls">
-                    <button id="play-pause-btn" class="control-btn" onclick="togglePlay()">
-                        <i class="fas fa-play"></i>
-                    </button>
-                </div>
+                <!-- クリックをガード -->
+                <div class="video-guard"></div>
+            </div>
+
+            <!-- 動画外の再生コントロール -->
+            <div class="controls-area rounded-b-lg">
+                <button id="play-pause-btn" class="control-btn" onclick="togglePlay()">
+                    <i class="fas fa-play ml-1"></i>
+                </button>
             </div>
 
             <!-- ステータス表示 -->
-            <div id="status-display" class="status-box text-center mb-8 h-6">
-                <span class="text-gray-500">[システム]</span> 動画の準備完了
+            <div id="status-display" class="status-box text-center mb-10 h-8">
+                <span class="text-gray-400">[ システム ]</span> READY TO STREAM
             </div>
 
             <!-- 報酬ボタン -->
-            <div class="flex justify-center">
-                <button id="reward-btn" onclick="claimReward()" class="neon-btn px-10 py-4 rounded-sm font-bold tracking-widest uppercase">
-                    <i class="fas fa-gift mr-2"></i> 報酬を獲得
+            <div class="flex justify-center mb-8">
+                <button id="reward-btn" onclick="claimReward()" class="neon-btn px-16 py-6 text-2xl rounded-sm font-bold tracking-widest uppercase">
+                    <i class="fas fa-gift mr-3"></i> 報酬を獲得
                 </button>
             </div>
 
             <!-- プレイヤー名表示 -->
-            <div class="mt-8 pt-4 border-t border-cyan-900 text-center">
-                <span id="player-id-label" class="text-[10px] text-cyan-700 font-mono uppercase mr-2">Minecraft ID:</span>
-                <span id="player-name" class="font-mono text-cyan-400">UNKNOWN</span>
+            <div class="mt-10 pt-6 border-t-2 border-cyan-900 text-center">
+                <span class="text-xs md:text-sm text-cyan-700 font-mono uppercase mr-2 tracking-widest">Minecraft ID:</span>
+                <span id="player-name" class="font-mono text-xl md:text-2xl text-cyan-400 font-bold">UNKNOWN</span>
             </div>
         </div>
     </div>
@@ -206,12 +205,12 @@
                 videoId: VIDEO_ID,
                 playerVars: {
                     'autoplay': 0,
-                    'controls': 0,        // 標準コントロールを無効化
-                    'disablekb': 1,      // キーボード操作を無効化
-                    'rel': 0,            // 関連動画を同じチャンネルに限定
-                    'iv_load_policy': 3, // アノテーションを非表示
-                    'modestbranding': 1, // ロゴを最小限にする
-                    'fs': 0,             // 全画面ボタン非表示
+                    'controls': 0,
+                    'disablekb': 1,
+                    'rel': 0,
+                    'iv_load_policy': 3,
+                    'modestbranding': 1,
+                    'fs': 0,
                     'origin': window.location.origin
                 },
                 events: {
@@ -241,7 +240,7 @@
             if (state === YT.PlayerState.PLAYING) {
                 btn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
-                btn.innerHTML = '<i class="fas fa-play"></i>';
+                btn.innerHTML = '<i class="fas fa-play ml-1"></i>';
             }
         }
 
@@ -250,10 +249,10 @@
                 const now = player.getCurrentTime();
                 if (now > maxTime + 2.5) {
                     player.seekTo(maxTime, true);
-                    updateStatus("INJECTION DETECTED: ACCESS DENIED", "warning-text");
+                    updateStatus("不正を検知：シークは禁止されています", "warning-text");
                 } else {
                     if (now > maxTime) maxTime = now;
-                    updateStatus("動画を視聴中...", "neon-text");
+                    updateStatus("動画視聴中... 報酬獲得までお待ちください", "neon-text");
                 }
             }
         }, 500);
@@ -261,26 +260,27 @@
         document.addEventListener("visibilitychange", () => {
             if (document.hidden && isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
                 player.pauseVideo();
-                updateStatus("動画停止中: このページを離れないでください！", "warning-text");
+                updateStatus("中断されました：ページを離れないでください", "warning-text");
             }
         });
 
         function onPlayerStateChange(event) {
             updatePlayButtonIcon(event.data);
             
-            // 動画終了時に関連動画に触れさせないよう、終了後も状態を維持
             if (event.data === YT.PlayerState.ENDED) {
                 const duration = player.getDuration();
                 if (maxTime >= duration * 0.98) {
                     isComplete = true;
                     document.getElementById('reward-btn').style.display = 'block';
-                    updateStatus("動画視聴完了！", "neon-text");
+                    updateStatus("視聴完了！報酬を受け取ってください", "neon-text text-xl");
+                } else {
+                    updateStatus("まだ終わっていません！最後まで視聴してください", "warning-text");
                 }
             }
         }
 
         function onPlayerError(event) {
-            updateStatus("エラー: 接続できませんでした", "warning-text");
+            updateStatus("エラー: 接続に失敗しました", "warning-text");
         }
 
         function updateStatus(msg, className) {
@@ -297,12 +297,12 @@
             fetch(`${GAS_URL}?player=${encodeURIComponent(playerName)}`, {
                 mode: 'no-cors'
             }).then(() => {
-                alert("報酬が送信されました。");
-                btn.innerText = "完了";
+                alert("報酬が正常に送信されました！");
+                btn.innerText = "受け取り済み";
             }).catch(() => {
                 alert("送信エラーが発生しました。");
                 btn.disabled = false;
-                btn.innerText = "リトライ";
+                btn.innerText = "再試行";
             });
         }
     </script>
