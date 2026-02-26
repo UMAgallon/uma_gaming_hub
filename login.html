@@ -56,6 +56,35 @@
         #player {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* 動画内クリック（YouTube遷移）を防止 */
+        }
+
+        /* カスタムコントロール */
+        .custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            cursor: pointer;
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+            transition: transform 0.2s;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.2);
         }
 
         .neon-btn {
@@ -64,7 +93,7 @@
             box-shadow: 0 0 8px var(--shadow-color);
             transition: all 0.3s ease-in-out;
             font-family: var(--font-sf);
-            display: none; /* 初期非表示 */
+            display: none;
         }
 
         .neon-btn:hover:not(:disabled) {
@@ -80,7 +109,6 @@
             font-size: 0.8rem;
         }
 
-        /* 警告アニメーション */
         .warning-text {
             color: #FF00FF;
             text-shadow: 0 0 5px #FF00FF;
@@ -96,7 +124,6 @@
 
     <div class="max-w-3xl w-full px-4">
         <div class="data-panel p-6 md:p-10 rounded-sm relative">
-            <!-- ヘッダー装飾 -->
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
             
             <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">AUTHENTICATION REQUIRED</h1>
@@ -105,11 +132,17 @@
             <!-- 動画エリア -->
             <div class="video-container mb-6">
                 <div id="player"></div>
+                <!-- カスタムコントロール（再生/停止のみ） -->
+                <div class="custom-controls">
+                    <button id="play-pause-btn" class="control-btn" onclick="togglePlay()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- ステータス表示 -->
             <div id="status-display" class="status-box text-center mb-8 h-6">
-                <span class="text-gray-500">[ SYSTEM ]</span> 動画を再生してください
+                <span class="text-gray-500">[ SYSTEM ]</span> READY TO STREAM
             </div>
 
             <!-- 報酬ボタン -->
@@ -128,7 +161,6 @@
     </div>
 
     <script>
-        // 設定項目
         const VIDEO_ID = 'Qc5AO400s6s';
         const GAS_URL = 'YOUR_GAS_WEBAPP_URL';
 
@@ -139,9 +171,8 @@
         let player;
         let maxTime = 0;
         let isComplete = false;
-        let isPlayerReady = false; // プレイヤーの準備状態を管理
+        let isPlayerReady = false;
 
-        // YouTube IFrame API の読み込み
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -152,8 +183,8 @@
                 videoId: VIDEO_ID,
                 playerVars: {
                     'autoplay': 0,
-                    'controls': 1,
-                    'disablekb': 1,
+                    'controls': 0,        // コントロールをすべて非表示
+                    'disablekb': 1,      // キーボード操作禁止
                     'rel': 0,
                     'modestbranding': 1,
                     'origin': window.location.origin
@@ -167,19 +198,37 @@
         }
 
         function onPlayerReady(event) {
-            isPlayerReady = true; // 準備完了
+            isPlayerReady = true;
         }
 
-        // シーク（早送り）防止監視
+        function togglePlay() {
+            if (!isPlayerReady || !player) return;
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        }
+
+        // コントロールボタンのアイコン更新
+        function updatePlayButtonIcon(state) {
+            const btn = document.getElementById('play-pause-btn');
+            if (state === YT.PlayerState.PLAYING) {
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                btn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
         setInterval(() => {
-            // プレイヤーが準備できており、かつ再生中の場合のみチェック
             if (isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
                 const now = player.getCurrentTime();
                 
-                // 記録された最大視聴時間より2.5秒以上先に飛ぼうとした場合
+                // コントロールがないため本来不要だが、開発者ツール対策としてシーク監視も維持
                 if (now > maxTime + 2.5) {
                     player.seekTo(maxTime, true);
-                    updateStatus("SKIPPING DETECTED: ACCESS DENIED", "warning-text");
+                    updateStatus("INJECTION DETECTED: ACCESS DENIED", "warning-text");
                 } else {
                     if (now > maxTime) maxTime = now;
                     updateStatus("STREAMING DATA...", "neon-text");
@@ -187,7 +236,6 @@
             }
         }, 500);
 
-        // タブ離席時の自動停止
         document.addEventListener("visibilitychange", () => {
             if (document.hidden && isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
                 player.pauseVideo();
@@ -196,9 +244,10 @@
         });
 
         function onPlayerStateChange(event) {
+            updatePlayButtonIcon(event.data);
+            
             if (event.data === YT.PlayerState.ENDED) {
                 const duration = player.getDuration();
-                // 動画の長さの98%以上再生されていれば完了とみなす
                 if (maxTime >= duration * 0.98) {
                     isComplete = true;
                     document.getElementById('reward-btn').style.display = 'block';
@@ -224,7 +273,6 @@
             btn.disabled = true;
             btn.innerText = "PROCESSING...";
 
-            // GASへの送信処理
             fetch(`${GAS_URL}?player=${encodeURIComponent(playerName)}`, {
                 mode: 'no-cors'
             }).then(() => {
