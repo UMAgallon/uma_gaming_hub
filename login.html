@@ -3,211 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Bonus - uma.dedyn.io</title>
+    <title>REWARD SYSTEM | UMA GAMING</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
         :root {
-            --primary-color: #2ecc71;
-            --bg-color: #f4f7f6;
-            --text-color: #2c3e50;
+            --neon-blue: #00FFFF;
+            --dark-blue: #151A2C;
+            --darker-blue: #0B0E19;
+            --shadow-color: rgba(0, 255, 255, 0.7);
+            --font-sf: 'Orbitron', sans-serif;
         }
+
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--darker-blue);
+            color: #E0E0E0;
+            background-image: linear-gradient(to right, var(--dark-blue) 1px, transparent 1px),
+                              linear-gradient(to bottom, var(--dark-blue) 1px, transparent 1px);
+            background-size: 30px 30px;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 700px;
-            width: 100%;
+
+        .neon-text {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--shadow-color), 0 0 10px var(--shadow-color);
+            font-family: var(--font-sf);
         }
-        h1 { margin-bottom: 10px; font-size: 24px; }
-        p { margin-bottom: 20px; color: #7f8c8d; }
-        
-        /* プレイヤーコンテナ */
-        #player-wrapper {
+
+        .data-panel {
+            background-color: rgba(26, 32, 53, 0.9);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .video-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%;
             background: #000;
-            border-radius: 8px;
+            border: 2px solid var(--dark-blue);
+            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 20px;
         }
+
         #player {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
         }
 
-        /* 報酬ボタン */
-        #reward-btn {
-            display: none;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
-        }
-        #reward-btn:hover {
-            background-color: #27ae60;
-            transform: scale(1.05);
-        }
-        #reward-btn:active {
-            transform: scale(0.95);
+        .neon-btn {
+            background-color: var(--dark-blue);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 8px var(--shadow-color);
+            transition: all 0.3s ease-in-out;
+            font-family: var(--font-sf);
+            display: none; /* 初期非表示 */
         }
 
-        #status-msg {
-            margin-top: 15px;
-            font-weight: bold;
-            min-height: 24px;
+        .neon-btn:hover:not(:disabled) {
+            background-color: var(--neon-blue);
+            color: var(--darker-blue);
+            box-shadow: 0 0 20px var(--neon-blue);
+            transform: scale(1.05);
         }
-        .warning { color: #e74c3c; }
-        .success { color: #2ecc71; }
+
+        .status-box {
+            font-family: var(--font-sf);
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+        }
+
+        /* 警告アニメーション */
+        .warning-text {
+            color: #FF00FF;
+            text-shadow: 0 0 5px #FF00FF;
+            animation: flicker 0.5s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>デイリーボーナス視聴</h1>
-    <p id="player-display">プレイヤー: 読み込み中...</p>
-    
-    <div id="player-wrapper">
-        <div id="player"></div>
+    <div class="max-w-3xl w-full px-4">
+        <div class="data-panel p-6 md:p-10 rounded-sm relative">
+            <!-- ヘッダー装飾 -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+            
+            <h1 class="neon-text text-2xl md:text-3xl mb-2 text-center tracking-tighter">AUTHENTICATION REQUIRED</h1>
+            <p class="text-center text-xs text-cyan-500 mb-8 font-mono tracking-widest uppercase">Verify your mission by watching the data stream</p>
+
+            <!-- 動画エリア -->
+            <div class="video-container mb-6">
+                <div id="player"></div>
+            </div>
+
+            <!-- ステータス表示 -->
+            <div id="status-display" class="status-box text-center mb-8 h-6">
+                <span class="text-gray-500">[ SYSTEM ]</span> 動画を再生してください
+            </div>
+
+            <!-- 報酬ボタン -->
+            <div class="flex justify-center">
+                <button id="reward-btn" onclick="claimReward()" class="neon-btn px-10 py-4 rounded-sm font-bold tracking-widest uppercase">
+                    <i class="fas fa-gift mr-2"></i> GET REWARD
+                </button>
+            </div>
+
+            <!-- プレイヤー名表示 -->
+            <div class="mt-8 pt-4 border-t border-cyan-900 text-center">
+                <span id="player-id-label" class="text-[10px] text-cyan-700 font-mono uppercase mr-2">Subject ID:</span>
+                <span id="player-name" class="font-mono text-cyan-400">UNKNOWN</span>
+            </div>
+        </div>
     </div>
 
-    <div id="status-msg">動画を再生してください</div>
-    
-    <button id="reward-btn" onclick="claimReward()">報酬を受け取る</button>
-</div>
+    <script>
+        // 設定項目
+        const VIDEO_ID = 'Qc5AO400s6s';
+        const GAS_URL = 'YOUR_GAS_WEBAPP_URL';
 
-<script>
-    // 1. 設定項目
-    const VIDEO_ID = 'Qc5AO400s6s'; // あなたのYouTube動画ID
-    const GAS_WEBAPP_URL = 'YOUR_GAS_URL'; // デプロイしたGASのURL
+        const urlParams = new URLSearchParams(window.location.search);
+        const playerName = urlParams.get('player') || 'GUEST_USER';
+        document.getElementById('player-name').innerText = playerName;
 
-    // 2. 変数管理
-    const urlParams = new URLSearchParams(window.location.search);
-    const playerName = urlParams.get('player');
-    let player;
-    let maxTimeReached = 0;
-    let isFinished = false;
+        let player;
+        let maxTime = 0;
+        let isComplete = false;
+        let isPlayerReady = false; // プレイヤーの準備状態を管理
 
-    document.getElementById('player-display').innerText = playerName ? `プレイヤー: ${playerName}` : "プレイヤー名が指定されていません";
+        // YouTube IFrame API の読み込み
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // 3. YouTube API 読み込み
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-            videoId: VIDEO_ID,
-            playerVars: {
-                'autoplay': 0,
-                'controls': 1, // コントロールは表示するがJSでガードする
-                'disablekb': 1,
-                'rel': 0,
-                'modestbranding': 1
-            },
-            events: {
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
-
-    // 4. 早送り禁止ロジック (0.5秒おきに監視)
-    setInterval(() => {
-        if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
-            let currentTime = player.getCurrentTime();
-            
-            // 過去に到達した最大秒数より3秒以上先に飛ばそうとしたら戻す
-            if (currentTime > maxTimeReached + 3) {
-                player.seekTo(maxTimeReached, true);
-                showStatus("早送りは禁止されています！", "warning");
-            } else {
-                if (currentTime > maxTimeReached) {
-                    maxTimeReached = currentTime;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: VIDEO_ID,
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 1,
+                    'disablekb': 1,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'origin': window.location.origin
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
                 }
-                showStatus("視聴中...", "");
+            });
+        }
+
+        function onPlayerReady(event) {
+            isPlayerReady = true; // 準備完了
+        }
+
+        // シーク（早送り）防止監視
+        setInterval(() => {
+            // プレイヤーが準備できており、かつ再生中の場合のみチェック
+            if (isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                const now = player.getCurrentTime();
+                
+                // 記録された最大視聴時間より2.5秒以上先に飛ぼうとした場合
+                if (now > maxTime + 2.5) {
+                    player.seekTo(maxTime, true);
+                    updateStatus("SKIPPING DETECTED: ACCESS DENIED", "warning-text");
+                } else {
+                    if (now > maxTime) maxTime = now;
+                    updateStatus("STREAMING DATA...", "neon-text");
+                }
             }
-        }
-    }, 500);
+        }, 500);
 
-    // 5. タブを離れたら停止
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden && player && player.getPlayerState() === YT.PlayerState.PLAYING) {
-            player.pauseVideo();
-            showStatus("一時停止しました（画面を離れないでください）", "warning");
-        }
-    });
-
-    // 6. 状態変化検知
-    function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.ENDED) {
-            // 動画の総時間と視聴済み最大時間を比較して最終確認
-            const duration = player.getDuration();
-            if (maxTimeReached >= duration - 2) {
-                isFinished = true;
-                document.getElementById('reward-btn').style.display = 'inline-block';
-                showStatus("視聴完了！ボタンを押して報酬を受け取ってください。", "success");
-            } else {
-                showStatus("最後まで正しく視聴してください。", "warning");
+        // タブ離席時の自動停止
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden && isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                updateStatus("STREAM PAUSED: STAY ON THIS PAGE", "warning-text");
             }
-        }
-    }
-
-    function showStatus(msg, className) {
-        const el = document.getElementById('status-msg');
-        el.innerText = msg;
-        el.className = className;
-    }
-
-    // 7. 報酬送信
-    function claimReward() {
-        if (!isFinished) return;
-        if (!playerName) {
-            alert("プレイヤー名が不明です。");
-            return;
-        }
-
-        const btn = document.getElementById('reward-btn');
-        btn.disabled = true;
-        btn.innerText = "送信中...";
-
-        // GASへ送信 (CORS対策のため no-cors または JSONP/通常のfetchを使用)
-        fetch(`${GAS_WEBAPP_URL}?player=${encodeURIComponent(playerName)}`, {
-            method: 'GET',
-            mode: 'no-cors' 
-        })
-        .then(() => {
-            alert("報酬リクエストを送信しました！マイクラで確認してください。");
-            btn.innerText = "送信完了";
-            // 悪用防止のためボタンを再度隠す
-            btn.style.display = 'none';
-        })
-        .catch(err => {
-            alert("通信エラーが発生しました。");
-            btn.disabled = false;
-            btn.innerText = "報酬を受け取る";
         });
-    }
-</script>
 
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                const duration = player.getDuration();
+                // 動画の長さの98%以上再生されていれば完了とみなす
+                if (maxTime >= duration * 0.98) {
+                    isComplete = true;
+                    document.getElementById('reward-btn').style.display = 'block';
+                    updateStatus("MISSION COMPLETE: ACCESS GRANTED", "neon-text");
+                } else {
+                    updateStatus("INCOMPLETE: WATCH UNTIL THE END", "warning-text");
+                }
+            }
+        }
+
+        function onPlayerError(event) {
+            updateStatus("ERROR: CONNECTION FAILED", "warning-text");
+        }
+
+        function updateStatus(msg, className) {
+            const el = document.getElementById('status-display');
+            el.innerHTML = `<span class="${className}">${msg}</span>`;
+        }
+
+        function claimReward() {
+            if (!isComplete) return;
+            const btn = document.getElementById('reward-btn');
+            btn.disabled = true;
+            btn.innerText = "PROCESSING...";
+
+            // GASへの送信処理
+            fetch(`${GAS_URL}?player=${encodeURIComponent(playerName)}`, {
+                mode: 'no-cors'
+            }).then(() => {
+                alert("報酬が送信されました。ゲーム内を確認してください。");
+                btn.innerText = "SUCCESS";
+            }).catch(() => {
+                alert("送信エラーが発生しました。");
+                btn.disabled = false;
+                btn.innerText = "RETRY";
+            });
+        }
+    </script>
 </body>
 </html>
