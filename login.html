@@ -1,1 +1,45 @@
+var player;
+var lastMaxTime = 0; // これまで再生した最大秒数
 
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '360',
+        width: '640',
+        videoId: 'あなたの動画ID',
+        playerVars: { 
+            'autoplay': 0, 
+            'controls': 1,
+            'rel': 0,
+            'disablekb': 1 // キーボード操作でのスキップも禁止
+        },
+        events: {
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+// 0.5秒ごとに再生位置をチェックするループ
+setInterval(function() {
+    if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+        var currentTime = player.getCurrentTime();
+        
+        // ユーザーがこれまで見た範囲より先にスキップしようとした場合
+        if (currentTime > lastMaxTime + 2) { 
+            player.seekTo(lastMaxTime); // 見ていた位置まで戻す
+            document.getElementById('status').innerText = "早送りは禁止されています！";
+        } else {
+            lastMaxTime = currentTime; // 正常な再生なら最大時間を更新
+        }
+    }
+}, 500);
+
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.ENDED) {
+        // 動画の長さ（player.getDuration()）に対して、
+        // ちゃんと最後まで見たか最終チェック（念のため）
+        if (lastMaxTime >= player.getDuration() - 1) {
+            document.getElementById('reward-btn').style.display = 'inline-block';
+            document.getElementById('status').innerText = "視聴完了！報酬を受け取ってください。";
+        }
+    }
+}
