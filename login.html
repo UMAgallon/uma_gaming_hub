@@ -53,10 +53,29 @@
             overflow: hidden;
         }
 
+        /* YouTube Iframe本体 
+           少し大きめに配置して、上下の黒帯やロゴを隠すテクニック 
+        */
         #player {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* 動画内クリック（YouTube遷移）を防止 */
+            top: -2px; 
+            left: -2px; 
+            width: calc(100% + 4px); 
+            height: calc(100% + 4px);
+        }
+
+        /* 動画上の透明ガード 
+           「その他の動画」をクリックさせないための透明な壁
+        */
+        .video-guard {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: transparent;
+            cursor: default;
         }
 
         /* カスタムコントロール */
@@ -66,7 +85,7 @@
             left: 0;
             width: 100%;
             padding: 15px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -77,14 +96,15 @@
             background: none;
             border: none;
             color: var(--neon-blue);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
             filter: drop-shadow(0 0 5px var(--neon-blue));
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
         }
 
         .control-btn:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px var(--neon-blue));
         }
 
         .neon-btn {
@@ -132,7 +152,10 @@
             <!-- 動画エリア -->
             <div class="video-container mb-6">
                 <div id="player"></div>
-                <!-- カスタムコントロール（再生/停止のみ） -->
+                <!-- 透明なガードレイヤー（クリックを吸収する） -->
+                <div class="video-guard" onclick="togglePlay()"></div>
+                
+                <!-- カスタムコントロール -->
                 <div class="custom-controls">
                     <button id="play-pause-btn" class="control-btn" onclick="togglePlay()">
                         <i class="fas fa-play"></i>
@@ -183,10 +206,12 @@
                 videoId: VIDEO_ID,
                 playerVars: {
                     'autoplay': 0,
-                    'controls': 0,        // コントロールをすべて非表示
-                    'disablekb': 1,      // キーボード操作禁止
-                    'rel': 0,
-                    'modestbranding': 1,
+                    'controls': 0,        // 標準コントロールを無効化
+                    'disablekb': 1,      // キーボード操作を無効化
+                    'rel': 0,            // 関連動画を同じチャンネルに限定
+                    'iv_load_policy': 3, // アノテーションを非表示
+                    'modestbranding': 1, // ロゴを最小限にする
+                    'fs': 0,             // 全画面ボタン非表示
                     'origin': window.location.origin
                 },
                 events: {
@@ -211,7 +236,6 @@
             }
         }
 
-        // コントロールボタンのアイコン更新
         function updatePlayButtonIcon(state) {
             const btn = document.getElementById('play-pause-btn');
             if (state === YT.PlayerState.PLAYING) {
@@ -224,8 +248,6 @@
         setInterval(() => {
             if (isPlayerReady && player && typeof player.getPlayerState === 'function' && player.getPlayerState() === YT.PlayerState.PLAYING) {
                 const now = player.getCurrentTime();
-                
-                // コントロールがないため本来不要だが、開発者ツール対策としてシーク監視も維持
                 if (now > maxTime + 2.5) {
                     player.seekTo(maxTime, true);
                     updateStatus("INJECTION DETECTED: ACCESS DENIED", "warning-text");
@@ -246,14 +268,13 @@
         function onPlayerStateChange(event) {
             updatePlayButtonIcon(event.data);
             
+            // 動画終了時に関連動画に触れさせないよう、終了後も状態を維持
             if (event.data === YT.PlayerState.ENDED) {
                 const duration = player.getDuration();
                 if (maxTime >= duration * 0.98) {
                     isComplete = true;
                     document.getElementById('reward-btn').style.display = 'block';
                     updateStatus("MISSION COMPLETE: ACCESS GRANTED", "neon-text");
-                } else {
-                    updateStatus("INCOMPLETE: WATCH UNTIL THE END", "warning-text");
                 }
             }
         }
@@ -276,7 +297,7 @@
             fetch(`${GAS_URL}?player=${encodeURIComponent(playerName)}`, {
                 mode: 'no-cors'
             }).then(() => {
-                alert("報酬が送信されました。ゲーム内を確認してください。");
+                alert("報酬が送信されました。");
                 btn.innerText = "SUCCESS";
             }).catch(() => {
                 alert("送信エラーが発生しました。");
