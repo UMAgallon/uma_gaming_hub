@@ -51,7 +51,7 @@
             border: 1px solid var(--dark-blue);
             border-radius: 4px;
             overflow: hidden;
-            cursor: pointer; /* クリック可能であることを示す */
+            cursor: pointer;
         }
 
         #player {
@@ -60,7 +60,7 @@
             left: -2px; 
             width: calc(100% + 4px); 
             height: calc(100% + 4px);
-            pointer-events: none; /* iframeへの直接干渉を防ぐ */
+            pointer-events: none;
         }
 
         .video-guard {
@@ -109,7 +109,6 @@
 </head>
 <body>
 
-    <!-- 全体サイズを抑えるため max-w-3xl に変更 -->
     <div class="max-w-3xl w-full px-6 py-8">
         <div class="data-panel p-6 md:p-10 rounded-lg relative">
             <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
@@ -129,16 +128,10 @@
             </div>
 
             <!-- 報酬ボタン -->
-            <div class="flex justify-center mb-6">
+            <div class="flex justify-center">
                 <button id="reward-btn" onclick="claimReward()" class="neon-btn px-12 py-5 text-xl rounded-sm font-bold tracking-widest uppercase">
                     <i class="fas fa-gift mr-3"></i> 報酬を獲得
                 </button>
-            </div>
-
-            <!-- プレイヤー名表示 -->
-            <div class="mt-8 pt-6 border-t-2 border-cyan-900 text-center">
-                <span class="text-xs md:text-sm text-cyan-700 font-mono uppercase mr-2 tracking-widest">Minecraft ID:</span>
-                <span id="player-name" class="font-mono text-xl md:text-2xl text-cyan-400 font-bold">UNKNOWN</span>
             </div>
         </div>
     </div>
@@ -149,7 +142,6 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const playerName = urlParams.get('player') || 'GUEST_USER';
-        document.getElementById('player-name').innerText = playerName;
 
         let player;
         let maxTime = 0;
@@ -186,7 +178,6 @@
             isPlayerReady = true;
         }
 
-        // 動画エリアクリック時の処理
         function togglePlay() {
             if (!isPlayerReady || !player) return;
             const state = player.getPlayerState();
