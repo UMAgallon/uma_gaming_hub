@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REWARD SYSTEM | UMA GAMING</title>
+    <title>デイリーボーナス | UMA GAMING</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -177,7 +177,7 @@
 
             <!-- プレイヤー名表示 -->
             <div class="mt-8 pt-4 border-t border-cyan-900 text-center">
-                <span id="player-id-label" class="text-[10px] text-cyan-700 font-mono uppercase mr-2">Subject ID:</span>
+                <span id="player-id-label" class="text-[10px] text-cyan-700 font-mono uppercase mr-2">Minecraft ID:</span>
                 <span id="player-name" class="font-mono text-cyan-400">UNKNOWN</span>
             </div>
         </div>
@@ -298,11 +298,11 @@
                 mode: 'no-cors'
             }).then(() => {
                 alert("報酬が送信されました。");
-                btn.innerText = "SUCCESS";
+                btn.innerText = "完了";
             }).catch(() => {
                 alert("送信エラーが発生しました。");
                 btn.disabled = false;
-                btn.innerText = "RETRY";
+                btn.innerText = "リトライ";
             });
         }
     </script>
